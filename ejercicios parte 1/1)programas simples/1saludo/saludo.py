@@ -1,1 +1,0 @@
-print("Hola "+input("Ingrese su nombre: "))
