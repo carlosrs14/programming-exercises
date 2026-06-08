@@ -18,5 +18,6 @@ int main() {
     } else {
         perror("Zero divisor");
     }
+    
     return 0;
 }
