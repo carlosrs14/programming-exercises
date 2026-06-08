@@ -12,12 +12,13 @@ int main() {
     printf("(A - B): %d\n", a - b);
     printf("(A * B): %d\n", a * b);
 
-    if (b != 0) {
-        printf("(A / B): %d\n", a / b);
-        printf("(A %% B): %d\n", a % b);
-    } else {
+    if (b == 0) {
         perror("Zero divisor");
+        return 0;
     }
-    
+
+    printf("(A / B): %d\n", a / b);
+    printf("(A %% B): %d\n", a % b);
+
     return 0;
 }

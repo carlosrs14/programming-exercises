@@ -7,12 +7,12 @@ int main() {
 
     printf("r: ");
     
-    if (scanf("%f", &r) == 1) {
-        printf("area: %.2f\n", PI * r * r);
-    } else {
+    if (scanf("%f", &r) != 1) {
         perror("scan error");
         return 1;
     }
+    
+    printf("area: %.2f\n", PI * r * r);
     
     return 0;
 }
