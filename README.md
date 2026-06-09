@@ -11,7 +11,8 @@ learn C by training
 6. **[06_structs](./06_structs)**: User-defined composite data structures.
 7. **[07_sorting](./07_sorting)**: Classic sorting algorithms.
 8. **[08_recursion](./08_recursion)**: Exercises solved using recursive functions.
-9. **[09_projects](./09_projects)**: Complete gui games and console tools.
+9. **[09_gui](./09_gui)**: Graphical user interface (GUI) learning exercises.
+10. **[10_projects](./10_projects)**: Complete console-based games and tools.
 
 ## Build and Run
 
