@@ -12,7 +12,7 @@ learn C by training
 7. **[07_sorting](./07_sorting)**: Classic sorting algorithms.
 8. **[08_recursion](./08_recursion)**: Exercises solved using recursive functions.
 9. **[09_gui](./09_gui)**: Graphical user interface (GUI) learning exercises.
-10. **[10_projects](./10_projects)**: Complete console-based games and tools.
+10. **[10_projects](./10_projects)**: Complete gui-based games and tools.
 
 ## Build and Run
 

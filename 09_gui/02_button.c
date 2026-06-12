@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #define TITLE "show button"
 #define WIDTH 600
@@ -11,10 +11,9 @@ typedef struct {
 } Game;
 
 typedef struct {
-    SDL_Rect rect;
+    SDL_FRect rect;
     short pressed;
 } Button;
-
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);
@@ -26,7 +25,7 @@ int main() {
     };
 
     Button b = {
-        .rect = {250, 250, 100, 50},
+        .rect = {250.0f, 250.0f, 100.0f, 50.0f},
         .pressed = 0
     };
         
@@ -39,11 +38,13 @@ int main() {
 
     while (running) {
         while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = 0;
+            if (event.type == SDL_EVENT_QUIT) {
+                running = 0;
+            }
 
-            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-                int mx = event.button.x;
-                int my = event.button.y;
+            if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN && event.button.button == SDL_BUTTON_LEFT) {
+                float mx = event.button.x;
+                float my = event.button.y;
                 
                 if (mx >= b.rect.x &&
                     mx <= b.rect.x + b.rect.w &&
@@ -59,10 +60,11 @@ int main() {
         SDL_SetRenderDrawColor(game.renderer, 0, 0, 0, 255);
         SDL_RenderClear(game.renderer);
 
-        if (b.pressed)
+        if (b.pressed) {
             SDL_SetRenderDrawColor(game.renderer, 0, 255, 0, 255);
-        else
+        } else {
             SDL_SetRenderDrawColor(game.renderer, 255, 0, 0, 255);
+        }
 
         SDL_RenderFillRect(game.renderer, &b.rect);
 
@@ -76,22 +78,20 @@ int main() {
     return 0;
 }
 
-int sdl_initialize(Game *game) {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+int sdl_initialize(Game* game) {
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
         return -1;
     }
     
     game->window = SDL_CreateWindow(
         TITLE,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
         WIDTH, HEIGTH, 0
     );
     if (!game->window) {
         return -1;
     }
 
-    game->renderer = SDL_CreateRenderer(game->window, -1, 0);
+    game->renderer = SDL_CreateRenderer(game->window, NULL);
     if (!game->renderer) {
         return -1;
     }
@@ -99,9 +99,8 @@ int sdl_initialize(Game *game) {
     return 0;
 }
 
-void sdl_quit(Game *game) {
+void sdl_quit(Game* game) {
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);
     SDL_Quit();
-    exit(0);
 }
