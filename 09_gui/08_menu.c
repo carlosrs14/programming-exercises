@@ -1,31 +1,11 @@
 #include <stdio.h>
 #include <SDL3/SDL_test_font.h>
 #include <SDL3/SDL.h>
+#include "component.h"
 
 #define TITLE "show menu"
 #define WIDTH 600
 #define HEIGTH 600
-
-typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} Game;
-
-typedef struct {
-    SDL_FRect menu_bar;
-    SDL_FRect btn_file;
-    SDL_FRect btn_edit;
-    SDL_FRect file_dropdown;
-    SDL_FRect edit_dropdown;
-    SDL_FRect file_items[3];
-    SDL_FRect edit_items[2];
-    const char* file_texts[3];
-    const char* edit_texts[2];
-    short file_open;
-    short edit_open;
-    float mouse_x;
-    float mouse_y;
-} Menu;
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);

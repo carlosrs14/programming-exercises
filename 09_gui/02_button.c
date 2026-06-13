@@ -1,19 +1,10 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
+#include "component.h"
 
 #define TITLE "show button"
 #define WIDTH 600
 #define HEIGTH 600
-
-typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} Game;
-
-typedef struct {
-    SDL_FRect rect;
-    short pressed;
-} Button;
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);

@@ -1,20 +1,16 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
+#include "component.h"
 
 #define TITLE "open window"
 #define WIDTH HEIGTH
 #define HEIGTH 600
 
-struct Game {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-};
-
-int sdl_initialize(struct Game* game);
-void sdl_quit(struct Game* game);
+int sdl_initialize(Game* game);
+void sdl_quit(Game* game);
 
 int main() {
-    struct Game game = {
+    Game game = {
         .window = NULL,
         .renderer = NULL
     };
@@ -26,7 +22,6 @@ int main() {
     }
 
     SDL_RenderClear(game.renderer);
-
     SDL_RenderPresent(game.renderer);
 
     SDL_Delay(5000);
@@ -36,7 +31,7 @@ int main() {
     return 0;
 }
 
-int sdl_initialize(struct Game *game) {
+int sdl_initialize(Game* game) {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         printf("failed at SDL_Init\n");
         return -1;
@@ -62,7 +57,7 @@ int sdl_initialize(struct Game *game) {
     return 0;
 }
 
-void sdl_quit(struct Game *game) {
+void sdl_quit(Game* game) {
     SDL_DestroyRenderer(game->renderer);
     SDL_DestroyWindow(game->window);
     SDL_Quit();

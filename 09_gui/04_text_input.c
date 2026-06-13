@@ -2,16 +2,11 @@
 #include <string.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_test_font.h>
+#include "component.h"
 
 #define TITLE "read text input"
 #define WIDTH 600
 #define HEIGTH 600
-
-typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} Game;
-
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);
@@ -22,7 +17,11 @@ int main() {
         .renderer = NULL
     };
 
-    char text_input[64] = "";
+    TextInput input = {
+        .rect = {185.0f, 230.0f, 200.0f, 20.0f},
+        .text = ""
+    };
+
     SDL_Event event;
     short running = 1;
 
@@ -39,16 +38,16 @@ int main() {
             }
 
             if (event.type == SDL_EVENT_TEXT_INPUT) {
-                if (strlen(text_input) + strlen(event.text.text) < sizeof(text_input) - 1) {
-                    strcat(text_input, event.text.text);
+                if (strlen(input.text) + strlen(event.text.text) < sizeof(input.text) - 1) {
+                    strcat(input.text, event.text.text);
                 }
             }
 
             if (event.type == SDL_EVENT_KEY_DOWN) {
                 if (event.key.key == SDLK_BACKSPACE) {
-                    size_t len = strlen(text_input);
+                    size_t len = strlen(input.text);
                     if (len > 0) {
-                        text_input[len - 1] = '\0';
+                        input.text[len - 1] = '\0';
                     }
                 }
             }
@@ -61,13 +60,12 @@ int main() {
         SDLTest_DrawString(game.renderer, 200, 200, "TYPE SOMETHING:");
 
         SDL_SetRenderDrawColor(game.renderer, 100, 100, 100, 255);
-        SDL_FRect box = { 185, 230, 200, 20 };
-        SDL_RenderRect(game.renderer, &box);
+        SDL_RenderRect(game.renderer, &input.rect);
 
         SDL_SetRenderDrawColor(game.renderer, 0, 255, 0, 255);
         
         char display_text[128];
-        snprintf(display_text, sizeof(display_text), "%s_", text_input);
+        snprintf(display_text, sizeof(display_text), "%s_", input.text);
         SDLTest_DrawString(game.renderer, 200, 240, display_text);
 
         SDL_RenderPresent(game.renderer);

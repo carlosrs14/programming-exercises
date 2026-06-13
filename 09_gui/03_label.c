@@ -1,16 +1,11 @@
 #include <stdio.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_test_font.h>
+#include "component.h"
 
 #define TITLE "show label"
 #define WIDTH 600
 #define HEIGTH 600
-
-typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} Game;
-
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);
@@ -19,6 +14,12 @@ int main() {
     Game game = {
         .window = NULL,
         .renderer = NULL
+    };
+
+    Label label = {
+        .x = 200.0f,
+        .y = 200.0f,
+        .text = "Hello"
     };
 
     if (sdl_initialize(&game) == -1) {
@@ -40,7 +41,7 @@ int main() {
 
         SDL_SetRenderDrawColor(game.renderer, 0, 255, 0, 255);
 
-        SDLTest_DrawString(game.renderer, 200, 200, "Hello");
+        SDLTest_DrawString(game.renderer, label.x, label.y, label.text);
 
         SDL_RenderPresent(game.renderer);
     }

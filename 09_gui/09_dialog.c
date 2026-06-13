@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <SDL3/SDL_test_font.h>
 #include <SDL3/SDL.h>
+#include "component.h"
 
 #define TITLE "show dialog"
 #define WIDTH 600
 #define HEIGTH 600
-
-typedef struct {
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-} Game;
 
 int sdl_initialize(Game* game);
 void sdl_quit(Game* game);
@@ -18,6 +14,18 @@ int main() {
     Game game = {
         .window = NULL,
         .renderer = NULL
+    };
+
+    Dialog info_dialog = {
+        .flags = SDL_MESSAGEBOX_INFORMATION,
+        .title = "Information",
+        .message = "This is an SDL3 native info message dialog box!"
+    };
+
+    Dialog error_dialog = {
+        .flags = SDL_MESSAGEBOX_ERROR,
+        .title = "Error Alert",
+        .message = "A critical simulated error occurred!"
     };
 
     SDL_Event event;
@@ -51,18 +59,18 @@ int main() {
                 if (mx >= btn_info.x && mx <= btn_info.x + btn_info.w &&
                     my >= btn_info.y && my <= btn_info.y + btn_info.h) {
                     
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, 
-                                              "Information", 
-                                              "This is an SDL3 native info message dialog box!", 
-                                              game.window);
+                    SDL_ShowSimpleMessageBox(info_dialog.flags, 
+                                             info_dialog.title, 
+                                             info_dialog.message, 
+                                             game.window);
                 }
                 else if (mx >= btn_error.x && mx <= btn_error.x + btn_error.w &&
                          my >= btn_error.y && my <= btn_error.y + btn_error.h) {
                     
-                    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, 
-                                              "Error Alert", 
-                                              "A critical simulated error occurred!", 
-                                              game.window);
+                    SDL_ShowSimpleMessageBox(error_dialog.flags, 
+                                             error_dialog.title, 
+                                             error_dialog.message, 
+                                             game.window);
                 }
             }
         }
