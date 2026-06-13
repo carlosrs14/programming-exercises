@@ -9,7 +9,7 @@ Exercises to learn graphical user interface (GUI) programming in C on Linux.
 - **3. Label:** Displaying and updating text labels.
 - **4. Text Input:** Reading text from input fields.
 - **5. Layout:** Organizing widgets in grids or boxes.
-- **6. Image:** Loading and displaying images.
+- **6. Personalized font:** Create and use a presonalizated font.
 - **7. Canvas Draw:** Drawing shapes on a canvas.
 - **8. Menu:** Creating menu bars and items.
 - **9. Dialog:** Showing popups and dialog windows.
