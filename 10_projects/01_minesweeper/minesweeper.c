@@ -8,9 +8,14 @@
 #define GAME_HEIGTH 600
 
 #define MINE_VAL 10
-#define COLS 10
-#define ROWS 10
-#define MINES 6
+#define COLS 20
+#define ROWS 20
+#define MINES 50
+
+typedef struct {
+    SDL_FRect rect;
+    int pressed;
+} Button;
 
 typedef struct {
     SDL_Window* window;
@@ -21,6 +26,7 @@ typedef struct {
     int value;
     bool revealed;
     bool flagged;
+    Button btn;
 } Cell;
 
 typedef struct {
@@ -41,6 +47,8 @@ void print_board(const Board* board);
 int count_adjacent_mines(const Board* board, int row, int col);
 void reveal_cell(Board* board, int row, int col);
 void flag_cell(Board* board, int row, int col);
+void render_board(SDL_Renderer* renderer, Board* board, float x, float y);
+bool is_point_in_rect(float x, float y, const SDL_FRect* r);
 
 int main() {
     Game game = {
@@ -57,21 +65,39 @@ int main() {
     
     generate_random_mines(&board);
     generate_board(&board);
-    print_board(&board);
-
     sdl_init(&game);
 
+    float mouse_x = 0.0f, mouse_y = 0.0f;
+
     SDL_Event event;
-    bool running = false;
+    bool running = true;
 
     while (running) {
         while (SDL_PollEvent(&event)) {
+
             if (event.type == SDL_EVENT_QUIT) {
                 running = false;
             }
+            else if (event.type == SDL_EVENT_MOUSE_MOTION) {
+                mouse_x = event.motion.x;
+                mouse_y = event.motion.y;
+            }
+            else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
 
+                // ver si esta dentro del tablero o el menu
+                
+                switch (event.button.button) {
+                    case SDL_BUTTON_LEFT:
+                        reveal_cell(&board, 0, 0);
+                        break;
 
+                    case SDL_BUTTON_RIGHT:
+                        flag_cell(&board, 0, 0);
+                        break;
+                }
+            }
 
+            render_board(game.renderer, &board, mouse_x, mouse_y);
             SDL_Delay(16);
         }
         
@@ -140,13 +166,38 @@ void generate_board(Board *board) {
         board->matrix[board->mine_coords[i][0]][board->mine_coords[i][1]].value = MINE_VAL;
     }
 
+
+    float start_x = 20.0f;
+    float start_y = 20.0f;
+    float btn_w = 20.0f;
+    float btn_h = 20.0f;
+    float gap = 1.0f;
+
     for (int i = 0; i < board->rows; i++) {
         for (int j = 0; j < board->cols; j++) {
             if (board->matrix[i][j].value != MINE_VAL) {
                 board->matrix[i][j].value = count_adjacent_mines(board, i, j);
+                board->matrix[i][j].btn.rect = (SDL_FRect) {
+                    start_x + j * (btn_w + gap),
+                    start_y + i * (btn_h + gap),
+                    btn_w,
+                    btn_h
+                };
             }
         }
     }
+
+    for (int i = 0; i < board->n_mines; i++) {
+        int row = board->mine_coords[i][0];
+        int col = board->mine_coords[i][1];
+        board->matrix[row][col].btn.rect = (SDL_FRect) {
+            start_x + col * (btn_w + gap),
+            start_y + row * (btn_h + gap),
+            btn_w,
+            btn_h
+        };
+    }
+
 }
 
 bool is_mine_position_unique(int** mine_coords, int current_count, int row, int col) {
@@ -244,4 +295,40 @@ void flag_cell(Board* board, int row, int col) {
     if (!board->matrix[row][col].revealed) {
         board->matrix[row][col].flagged = !board->matrix[row][col].flagged;
     }
+}
+
+void render_board(SDL_Renderer *renderer, Board *board, float mouse_x, float mouse_y) {
+    SDL_SetRenderDrawColor(renderer, 230, 230, 230, 255);
+    SDL_RenderClear(renderer);
+
+    for (int i = 0; i < board->rows; i++) {
+        for (int j = 0; j < board->cols; j++) {
+            SDL_SetRenderDrawColor(renderer, 170, 170, 170, 255);
+
+            if (board->matrix[i][j].value == MINE_VAL) {
+                SDL_SetRenderDrawColor(renderer, 10, 10, 15, 255);
+            }
+
+            if (is_point_in_rect(mouse_x, mouse_y, &board->matrix[i][j].btn.rect)) {
+                
+            }
+            
+            if (board->matrix[i][j].flagged) {
+                
+            }
+            
+            if (board->matrix[i][j].revealed) {
+                
+            }
+            
+            SDL_RenderFillRect(renderer, &board->matrix[i][j].btn.rect);
+        }
+    }
+    
+
+    SDL_RenderPresent(renderer);
+}
+
+bool is_point_in_rect(float x, float y, const SDL_FRect* r) {
+    return x >= r->x && x <= r->x + r->w && y >= r->y && y <= r->y + r->h;
 }
