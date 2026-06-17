@@ -44,7 +44,7 @@ Make sure the SDL3 library is installed on your system.
 Compile the application by linking the SDL3 base library and the SDL3 test module, which provides the font rendering utilities:
 
 ```bash
-gcc minesweeper.c -o minesweeper-lSDL3 -lSDL3_test
+gcc src/main.c src/minesweeper.c -o minesweeper-lSDL3 -lSDL3_test
 ```
 
 ### Running
