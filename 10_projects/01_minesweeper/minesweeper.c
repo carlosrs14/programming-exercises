@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_test_font.h>
 
 #define GAME_WITDH 600
 #define GAME_HEIGTH 600
@@ -30,6 +31,7 @@ typedef struct {
     bool revealed;
     bool flagged;
     Button btn;
+    char label[4];
 } Cell;
 
 typedef struct {
@@ -109,6 +111,14 @@ int main() {
             }
 
             render_board(game.renderer, &board, mouse_x, mouse_y);
+            
+            if (board.state == LOSS) {
+                running = false;
+            }
+
+            if (board.state == WON) {
+                running = false;
+            }
         }
         
     }
@@ -174,6 +184,7 @@ void generate_board(Board *board) {
     
     for (int i = 0; i < board->n_mines; i++) {
         board->matrix[board->mine_coords[i][0]][board->mine_coords[i][1]].value = MINE_VAL;
+        // board->matrix[board->mine_coords[i][0]][board->mine_coords[i][1]].label = "b";
     }
 
 
@@ -280,7 +291,14 @@ void reveal_cell(Board* board, int row, int col) {
     if (row < 0 || row >= board->rows || col < 0 || col >= board->cols) {
         return;
     }
+    
     if (board->matrix[row][col].revealed || board->matrix[row][col].flagged) {
+        return;
+    }
+
+    if (board->matrix[row][col].value == MINE_VAL) {
+        board->state = LOSS;
+        // board->matrix[row][col].
         return;
     }
 
@@ -320,7 +338,7 @@ void render_board(SDL_Renderer *renderer, Board *board, float mouse_x, float mou
             }
 
             if (is_point_in_rect(mouse_x, mouse_y, &board->matrix[i][j].btn.rect)) {
-            SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
+                SDL_SetRenderDrawColor(renderer, 200, 200, 200, 255);
             }
             
             if (board->matrix[i][j].flagged) {
@@ -332,6 +350,9 @@ void render_board(SDL_Renderer *renderer, Board *board, float mouse_x, float mou
             }
             
             SDL_RenderFillRect(renderer, &board->matrix[i][j].btn.rect);
+
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDLTest_DrawString(renderer,  board->matrix[i][j].btn.rect.x + 3.0f, board->matrix[i][j].btn.rect.y + 3.0f, board->matrix[i][j].label);
         }
     }
     
