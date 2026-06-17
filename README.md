@@ -22,3 +22,23 @@ Use `gcc`:
 gcc file_name.c
 ./a.out
 ```
+
+## Currently
+
+Working on **[10_projects](./10_projects/README.md)**.
+
+## Future work
+
+Exercies for:
+
+- **Enums**
+- **Unios**
+- **"Strings"**
+- **File handler**
+- **Concurrency (posix and openmp)**
+- **Memory management**
+- **OS interfaces**
+- **Assembly on C**
+- **Advanced Projects**
+
+Then order full repo by difficulty
