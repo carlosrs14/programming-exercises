@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-enum Day {
+typedef enum {
     MONDAY = 1,
     TUESDAY,
     WEDNESDAY,
@@ -8,29 +8,41 @@ enum Day {
     FRIDAY,
     SATURDAY,
     SUNDAY
-};
+} DayOfWeek;
 
-const char *day_names[] = {
-    "Invalid",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-};
+const char* get_day_name(DayOfWeek day) {
+    switch (day) {
+        case MONDAY: return "Monday";
+        case TUESDAY: return "Tuesday";
+        case WEDNESDAY: return "Wednesday";
+        case THURSDAY: return "Thursday";
+        case FRIDAY: return "Friday";
+        case SATURDAY: return "Saturday";
+        case SUNDAY: return "Sunday";
+        default: return "Unknown";
+    }
+}
+
+int is_weekend(DayOfWeek day) {
+    return (day == SATURDAY || day == SUNDAY);
+}
 
 int main() {
-    int day;
-    printf("enter a number (1-7): ");
-    if (scanf("%d", &day) != 1) {
+    int day_input;
+
+    printf("enter day number (1-7): ");
+    if (scanf("%d", &day_input) != 1) {
         perror("invalid input");
+        return 1;
     }
 
-    if (day > 7 || day < 1) {
-        perror("invalid number");
+    if (day_input < 1 || day_input > 7) {
+        printf("error: day must be between 1 and 7\n");
+        return 1;
     }
-    printf("%s\n", day_names[day]);
+
+    DayOfWeek day = (DayOfWeek)day_input;
+    printf("Day: %s (%s)\n", get_day_name(day), is_weekend(day) ? "weekend" : "weekday");
+
     return 0;
 }
